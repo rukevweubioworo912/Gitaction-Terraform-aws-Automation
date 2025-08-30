@@ -10,8 +10,8 @@ env:
   IMAGE_NAME: my-terraform-image
   IMAGE_TAG: latest
   ECR_REPO_NAME: terraform-pipeline
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   AWS_ACCOUNT_ID: 739275466503
   ECR_REPO_URI: 739275466503.dkr.ecr.us-east-1.amazonaws.com/terraform-pipeline
 
