@@ -12,8 +12,8 @@ env:
   ECR_REPO_NAME: terraform-pipeline
   DOCKERHUB_USERNAME:  ${{ secrets.DOCKER_USERNAME }}
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  AWS_ACCOUNT_ID: 739275466503
-  ECR_REPO_URI: 739275466503.dkr.ecr.us-east-1.amazonaws.com/terraform-pipeline
+  AWS_ACCOUNT_ID: 216989140286
+  ECR_REPO_URI: 216989140286.dkr.ecr.us-east-1.amazonaws.com/terraform-pipeline
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
