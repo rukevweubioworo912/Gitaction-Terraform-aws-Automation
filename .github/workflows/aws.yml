@@ -1,4 +1,4 @@
-name: Terraform Apply and Build/Push Docker Image
+name: Terraform Apply and Build/Push Docker Image open 
 
 on:
   push:
