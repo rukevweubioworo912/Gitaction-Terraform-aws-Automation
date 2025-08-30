@@ -13,7 +13,7 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   AWS_ACCOUNT_ID: 739275466503
-  ECR_REPO_URI: 739275466503.dkr.ecr.us-east-1.amazonaws.com/terraform-gitaction-deployment
+  ECR_REPO_URI: 739275466503.dkr.ecr.us-east-1.amazonaws.com/terraform-pipeline
 
 jobs:
   terraform-apply:
