@@ -1,8 +1,8 @@
 name: Terraform Apply and Build/Push Docker Image hello
 
 on:
-  push:
-    branches:
+  #push:
+    #branches:
       - main
 
 env:
