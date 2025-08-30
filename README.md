@@ -1,4 +1,4 @@
-# AWS ECS Terraform CI/CD Boilerplate
+## AWS ECS Terraform CI/CD Boilerplate
 
 A production-ready template for deploying Dockerized web applications to AWS ECS (Fargate) using Terraform for infrastructure management and GitHub Actions for CI/CD automation.
 
