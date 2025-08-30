@@ -104,11 +104,5 @@ jobs:
 
       - name: Push Docker Image to Docker Hub
         working-directory: ./app
-<<<<<<< HEAD
         run: docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-
-        
-=======
-        run: docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
->>>>>>> 9ce615c (update the workfkow)
