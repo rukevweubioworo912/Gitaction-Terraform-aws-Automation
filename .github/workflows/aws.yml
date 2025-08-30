@@ -1,0 +1,102 @@
+name: Terraform Apply and Build/Push Docker Image hello
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: us-east-1
+  IMAGE_NAME: my-terraform-image
+  IMAGE_TAG: latest
+  ECR_REPO_NAME: terraform-pipeline
+  DOCKERHUB_USERNAME:  ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  AWS_ACCOUNT_ID: 954780175660
+  ECR_REPO_URI: 954780175660.dkr.ecr.us-east-1.amazonaws.com/terraform-pipeline
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.8
+
+      - name: change directory to terraform directory
+        working-directory: ./Terraform
+        run : terraform init 
+
+      - name: change directory to terraform directory
+        working-directory: ./Terraform
+        run : terraform validate 
+
+
+      - name: Import existing ECR repo
+        working-directory: ./Terraform
+        run: terraform import aws_ecr_repository.app_repo ${{ env.ECR_REPO_NAME }} || echo "Already imported"
+
+      - name: Terraform Plan
+        working-directory: ./Terraform
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: ./Terraform
+        run: terraform apply -auto-approve tfplan
+
+  build-push-ecr:
+    runs-on: ubuntu-latest
+    needs: terraform-apply
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get ECR login password and login
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | \
+          docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+
+      - name: Build Docker image
+        run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+
+      - name: Tag Docker image for ECR
+        run: docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.ECR_REPO_URI }}:${{ env.IMAGE_TAG }}
+
+      - name: Push Docker image to ECR
+        run: docker push ${{ env.ECR_REPO_URI }}:${{ env.IMAGE_TAG }}
+
+  build-and-push-dockerhub:
+    runs-on: ubuntu-latest
+    needs: build-push-ecr
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
+
+      - name: Build Docker Image
+        run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+
+      - name: Push Docker Image to Docker Hub
+        run: docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
