@@ -2,10 +2,7 @@
 
 A production-ready template for deploying Dockerized web applications to AWS ECS (Fargate) using Terraform for infrastructure management and GitHub Actions for CI/CD automation.
 
----
-
 ## Table of Contents
-
 - [Project Description](#project-description)
 - [Architecture Overview](#architecture-overview)
 - [Features](#features)
@@ -22,15 +19,13 @@ A production-ready template for deploying Dockerized web applications to AWS ECS
 - [References](#references)
 - [License](#license)
 
----
+
 
 ## Project Description
 
 This repository demonstrates a modern, fully automated approach to deploying and operating a containerized web application on AWS. It leverages Infrastructure as Code (IaC) with Terraform, uses Docker for packaging the application, utilizes AWS Elastic Container Registry (ECR) for image storage, and automates all deployment steps through GitHub Actions.
 
 This template is suitable for production, staging, or personal projects that require fast, repeatable, and secure cloud deployments.
-
----
 
 ## Architecture Overview
 
@@ -41,8 +36,6 @@ This template is suitable for production, staging, or personal projects that req
 - **AWS ALB**: Application Load Balancer for HTTP/S traffic.
 - **GitHub Actions**: Automates build, push, and deploy steps.
 
----
-
 ## Features
 
 - End-to-end Infrastructure as Code
@@ -50,8 +43,6 @@ This template is suitable for production, staging, or personal projects that req
 - Zero-downtime ECS deployments
 - Secure by default (IAM, Security Groups, environment variables)
 - Easily extensible (add databases, queues, S3, etc.)
-
----
 
 ## Tech Stack
 
@@ -63,14 +54,7 @@ This template is suitable for production, staging, or personal projects that req
 - Terraform (>= 1.0)
 - GitHub Actions
 
----
-
 ## Infrastructure Diagram
-
-
-
-
----
 
 ##  Requirements
 
@@ -79,8 +63,6 @@ This template is suitable for production, staging, or personal projects that req
 - Terraform (>= 1.0)
 - Docker (for local builds and testing)
 - GitHub account with Actions enabled
-
----
 
 ## Repository Structure
 
@@ -122,8 +104,6 @@ This template is suitable for production, staging, or personal projects that req
 
 - Terraform will create the ECR repository, or you can specify an existing one.
 
----
-
 ## How it Works
 
 1. **Code Push**: Developer pushes to `main` (or another branch).
@@ -132,8 +112,6 @@ This template is suitable for production, staging, or personal projects that req
 4. **Terraform Deploy**: Terraform applies infrastructure and updates ECS task definition with the new image.
 5. **ECS Rolling Update**: ECS pulls the new image and seamlessly updates running tasks.
 6. **App Live**: Your app is ready and discoverable via the Load Balancer DNS output by Terraform.
-
----
 
 ## Setup Instructions
 
@@ -163,8 +141,6 @@ terraform apply -auto-approve
 ### 4. Push code to GitHub
 
 - The GitHub Actions workflow will automatically run on a push to your main branch.
-
----
 
 ##  CI/CD Pipeline Details
 
@@ -216,8 +192,6 @@ jobs:
           terraform apply -auto-approve -var="image_uri=$IMAGE_URI"
 ```
 
----
-
 ## Security Considerations
 
 - Never commit AWS credentials or Terraform state files to source control.
@@ -225,19 +199,11 @@ jobs:
 - Restrict Security Groups to only necessary ports.
 - Store secrets (environment variables, credentials) in GitHub Secrets and AWS Parameter Store as appropriate.
 
----
-
 ## Troubleshooting
 
 - **Pipeline Failed**: Review logs in GitHub Actions.
 - **Terraform Error**: Check variable values and AWS resource limits.
 - **ECS/ECR Issues**: Validate IAM permissions and resource names.
 - **Ports/Access**: Make sure ALB and security groups are configured correctly for HTTP/S.
-
----
-
-
-
----
 
 **Happy Deploying! **
