@@ -74,12 +74,15 @@ jobs:
           docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
       - name: Build Docker image
+        working-directory: ./app
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
 
       - name: Tag Docker image for ECR
+        working-directory: ./app
         run: docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.ECR_REPO_URI }}:${{ env.IMAGE_TAG }}
 
       - name: Push Docker image to ECR
+        working-directory: ./app
         run: docker push ${{ env.ECR_REPO_URI }}:${{ env.IMAGE_TAG }}
 
   build-and-push-dockerhub:
@@ -96,7 +99,12 @@ jobs:
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Build Docker Image
+        working-directory: ./app
         run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
 
       - name: Push Docker Image to Docker Hub
+        working-directory: ./app
         run: docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+
+        
